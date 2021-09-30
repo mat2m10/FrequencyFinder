@@ -7,15 +7,18 @@ import subprocess
 
 def find_drive_path():
     username = getpass.getuser() # Finding the username of the user
-    array_disks = !lsblk -o NAME -nl # All the disks in use
+    bashCommand1 = "lsblk -o NAME -nl"
+    process1 = subprocess.Popen(bashCommand1.split(), stdout=subprocess.PIPE)
+    output1, error1 = process1.communicate()
+    array_disks = output1.decode('ascii').split("\n")
     if "sda1" in array_disks:
         path = "/dev/sda1"
     elif "sda" in array_disks:
         path = "/dev.sda"
-    bashCommand = f"findmnt -A {path}" # to find the path of the place where mounted
-    process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
-    output, error = process.communicate()
-    drive_path = output.decode('ascii').split('\n')[1].split(' ')[0] # Using the output
+    bashCommand2 = f"findmnt -A {path}" # to find the path of the place where mounted
+    process2 = subprocess.Popen(bashCommand2.split(), stdout=subprocess.PIPE)
+    output2, error2 = process2.communicate()
+    drive_path = output2.decode('ascii').split('\n')[1].split(' ')[0] # Using the output
     return drive_path
 
 def metrics_viewer(model):
