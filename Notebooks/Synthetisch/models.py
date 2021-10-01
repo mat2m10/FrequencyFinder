@@ -32,6 +32,7 @@ class Dense(layers.Layer):
         M_a = tf.matmul(inputs, self.W) + self.b # initial Matrix
         return M_a
 
+
 class MyReLU(layers.Layer):
     """
     Manually build the activation function (ReLU)
@@ -167,7 +168,7 @@ class DensePop(layers.Layer):
         M_a = tf.matmul(inputs, self.W) + self.b # initial Matrix
         return M_a
 
-    
+
 class frequencyfinder(keras.Model):
     def __init__(
         self,
@@ -176,13 +177,11 @@ class frequencyfinder(keras.Model):
         name = "frequencyfinder"):
         super(frequencyfinder, self).__init__()
         self.input_dim = input_dim
-        self.dense1 = DensePop(num_pop)
+        self.densePop = DensePop(num_pop)
         self.relu = MyReLU()
         self.softmax = layers.Softmax()
-        self.dense2 = Dense(input_dim)
-        self.stoch = layers.IndependentLogistic()
+        self.denseFreq = Dense(input_dim)
     def call(self, inputs):
-        x = self.softmax(self.relu(self.dense1(inputs)))
-        x = self.softmax(self.relu(self.dense2(x)))
-        x = self.stoch(x)
+        x = self.softmax(self.relu(self.densePop(inputs)))
+        x = self.softmax(self.relu(self.denseFreq(x)))
         return x
