@@ -57,8 +57,8 @@ class Encoder(layers.Layer):
     """
     Creating a two layers encoder
     """
-    def __init__(self, l
-                 atent_dim = 50, 
+    def __init__(self, 
+                 latent_dim = 50, 
                  intermediate_dim = 200, 
                  name="Encoder", 
                  **kwargs):
@@ -167,18 +167,22 @@ class DensePop(layers.Layer):
         M_a = tf.matmul(inputs, self.W) + self.b # initial Matrix
         return M_a
 
-class FrequencyFinder(keras.Model):
-    """
-    crazy ass model finding the frequency through random sampling
-    """
+    
+class frequencyfinder(keras.Model):
     def __init__(
         self,
-        population_layer = 10,
-        name = "frequency finder",
-        **kwargs
-    ):
-        super(FrequencyFinder, self).__init__(name = name, **kwargs)
-        self.population_layer = population_layer
-        self.link = 
+        input_dim,
+        num_pop,
+        name = "frequencyfinder"):
+        super(frequencyfinder, self).__init__()
+        self.input_dim = input_dim
+        self.dense1 = DensePop(num_pop)
+        self.relu = MyReLU()
+        self.softmax = layers.Softmax()
+        self.dense2 = Dense(input_dim)
+        self.stoch = layers.IndependentLogistic()
     def call(self, inputs):
-        z = 
+        x = self.softmax(self.relu(self.dense1(inputs)))
+        x = self.softmax(self.relu(self.dense2(x)))
+        x = self.stoch(x)
+        return x
