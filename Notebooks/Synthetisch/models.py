@@ -57,7 +57,11 @@ class Encoder(layers.Layer):
     """
     Creating a two layers encoder
     """
-    def __init__(self, latent_dim = 50, intermediate_dim = 200, name="Encoder", **kwargs):
+    def __init__(self, l
+                 atent_dim = 50, 
+                 intermediate_dim = 200, 
+                 name="Encoder", 
+                 **kwargs):
         super(Encoder, self).__init__(name=name, **kwargs)
         self.dense1 = Dense(intermediate_dim)
         self.dense2 = Dense(latent_dim)
@@ -127,3 +131,19 @@ class Abyss_Encoder(keras.Model):
         x = keras.Input(shape = input_len)
         print(x)
         return keras.Model(inputs = [x], outputs = self.call(x))
+    
+class FrequencyFinder(keras.Model):
+    """
+    crazy ass model finding the frequency through random sampling
+    """
+    def __init__(
+        self,
+        population_layer = 10,
+        name = "frequency finder",
+        **kwargs
+    ):
+        super(FrequencyFinder, self).__init__(name = name, **kwargs)
+        self.population_layer = population_layer
+        self.link = 
+    def call(self, inputs):
+        z = 
