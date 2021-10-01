@@ -132,6 +132,41 @@ class Abyss_Encoder(keras.Model):
         print(x)
         return keras.Model(inputs = [x], outputs = self.call(x))
     
+"""
+"""
+"""
+Model Build with as objective finding the array of allele frequencies
+"""
+"""
+"""
+
+class DensePop(layers.Layer):
+    """
+    Create the dense layer (only inputs with weights and bias)
+    """
+    def __init__(self, units):
+        
+        super(DensePop, self).__init__()
+        self.units = units
+    def build(self, input_shape):
+        self.W = self.add_weight(
+            name = 'W',
+            shape = (input_shape[-1], self.units),
+            initializer = 'random_normal',
+            trainable = True,
+        )
+        self.b = self.add_weight(
+            name='b',
+            shape = (self.units, ), initializer = "zeros", trainable = True,
+        )
+    def call(self, inputs):
+        """
+        Does the matrix multiplication from input and weights + biases 
+        """
+        print()
+        M_a = tf.matmul(inputs, self.W) + self.b # initial Matrix
+        return M_a
+
 class FrequencyFinder(keras.Model):
     """
     crazy ass model finding the frequency through random sampling
