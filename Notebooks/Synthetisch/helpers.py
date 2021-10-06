@@ -4,6 +4,7 @@ import pandas as pd
 import os
 import getpass
 import subprocess
+import matplotlib.pyplot as plt
 
 def find_drive_path():
     username = getpass.getuser() # Finding the username of the user
