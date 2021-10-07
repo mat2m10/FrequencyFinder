@@ -159,3 +159,18 @@ def snp_counter(df):
     df_grouped['id'] = df_grouped['id']/df_grouped['val']
     df_grouped['genotype'] = df_grouped['genotype']/df_grouped['val']
     return df_grouped.sort_values(by=['id'])
+
+def p_finder(genos,nr_splits):
+    p_matrix = []
+    for i in range(len(genos[0])):
+        geno = genos[:,i] - 1
+        major = np.where(geno == -1, 0, geno)
+        minor = np.where(geno == 1, 0, geno)
+        x_axis = np.array(range(0, len(major), 1))
+        arrays = np.split(geno, nr_splits)
+        array_sums = []
+        for array in arrays:
+            array_sums.append(sum(array)/len(array))
+        p = list(map(lambda x:(x+1)/2, array_sums))
+        p_matrix.append(p)
+    return p_matrix
