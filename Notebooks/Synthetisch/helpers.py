@@ -5,6 +5,7 @@ import os
 import getpass
 import subprocess
 import matplotlib.pyplot as plt
+import tensorflow.keras as keras
 
 def find_drive_path():
     username = getpass.getuser() # Finding the username of the user
@@ -174,3 +175,21 @@ def p_finder(genos,nr_splits):
         p = list(map(lambda x:(x+1)/2, array_sums))
         p_matrix.append(p)
     return p_matrix
+def polifit_model(x_reduced, p_matrix, x_axis):
+    q_pred_mat = []
+    try:
+        polifit_model = keras.models.load_model("../../Data/MyPoliFitModel")
+    except:
+        polifit_model = keras.Sequential()
+        polifit_model.add(keras.layers.Dense(units = 1, activation = 'linear', input_shape=[1]))
+        polifit_model.add(keras.layers.Dense(units = 64, activation = 'elu'))
+        polifit_model.add(keras.layers.Dense(units = 64, activation = 'elu'))
+        polifit_model.add(keras.layers.Dense(units = 1, activation = 'linear'))
+        polifit_model.compile(loss='mse', optimizer="adam")
+        polifit_model.fit( x_reduced, np.array(p_matrix[0]), epochs=1000, verbose=0)
+        polifit_model.save("../../Data/MyPoliFitModel")
+    for p in p_matrix:
+        polifit_model.fit( x_reduced, np.array(p), epochs=100, verbose=0)
+        y_predicted = polifit_model.predict(x_axis)
+        q_pred_mat.append(y_predicted)
+    return q_pred_mat
