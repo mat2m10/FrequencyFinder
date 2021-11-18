@@ -1,2 +1,0 @@
-# FrequencyFinder
-Finding Allele frequencies
